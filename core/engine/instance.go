@@ -88,6 +88,8 @@ func (i *instance) Run(ctx context.Context) (recoverErr error) {
 			}
 			if !i.discardOverflow || !waiter.IsSlowDown(ctx) {
 				i.metrics.Request.Add(1)
+				i.metrics.BusyInstances.OnStart(i.id)
+				defer i.metrics.BusyInstances.OnFinish(i.id)
 				if tag.Debug {
 					i.log.Debug("Shooting", zap.Any("ammo", ammo))
 				}

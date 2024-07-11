@@ -8,20 +8,12 @@ import (
 	"go.uber.org/zap"
 )
 
-func newEngineMetrics() engine.Metrics {
-	return engine.Metrics{
-		Request:        monitoring.NewCounter("engine_Requests"),
-		Response:       monitoring.NewCounter("engine_Responses"),
-		InstanceStart:  monitoring.NewCounter("engine_UsersStarted"),
-		InstanceFinish: monitoring.NewCounter("engine_UsersFinished"),
-	}
-}
-
 func startReport(m engine.Metrics) {
 	evReqPS := monitoring.NewCounter("engine_ReqPS")
 	evResPS := monitoring.NewCounter("engine_ResPS")
 	evActiveUsers := monitoring.NewCounter("engine_ActiveUsers")
 	evActiveRequests := monitoring.NewCounter("engine_ActiveRequests")
+	evLastMaxActiveRequests := monitoring.NewCounter("engine_LastMaxActiveRequests")
 	requests := m.Request.Get()
 	responses := m.Response.Get()
 	go func() {
@@ -36,15 +28,17 @@ func startReport(m engine.Metrics) {
 			reqps := requestsNew - requests
 			activeUsers := m.InstanceStart.Get() - m.InstanceFinish.Get()
 			activeRequests := requestsNew - responsesNew
+			lastMaxActiveRequests := int64(m.BusyInstances.Flush())
 			zap.S().Infof(
 				"[ENGINE] %d resp/s; %d req/s; %d users; %d active\n",
-				rps, reqps, activeUsers, activeRequests)
+				rps, reqps, activeUsers, lastMaxActiveRequests)
 
 			requests = requestsNew
 			responses = responsesNew
 
 			evActiveUsers.Set(activeUsers)
 			evActiveRequests.Set(activeRequests)
+			evLastMaxActiveRequests.Set(lastMaxActiveRequests)
 			evReqPS.Set(reqps)
 			evResPS.Set(rps)
 		}

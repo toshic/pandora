@@ -25,7 +25,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-const Version = "0.5.29"
+const Version = "0.5.30"
 const defaultConfigFile = "load"
 const stdinConfigSelector = "-"
 
@@ -122,7 +122,7 @@ func ReadConfigAndRunEngine() {
 
 	closeMonitoring := startMonitoring(conf.Monitoring)
 	defer closeMonitoring()
-	m := newEngineMetrics()
+	m := engine.NewMetrics("engine")
 	startReport(m)
 
 	pandora := engine.New(log, m, conf.Engine)

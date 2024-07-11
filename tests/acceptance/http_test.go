@@ -41,7 +41,7 @@ func (s *PandoraSuite) SetupSuite() {
 	})
 
 	s.log = testutil.NewNullLogger()
-	s.metrics = newEngineMetrics("http_suite")
+	s.metrics = engine.NewMetrics("http_suite")
 }
 
 func (s *PandoraSuite) Test_Http_Check_Passes() {

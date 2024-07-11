@@ -17,7 +17,6 @@ import (
 	coremock "github.com/yandex/pandora/core/mocks"
 	"github.com/yandex/pandora/core/provider"
 	"github.com/yandex/pandora/core/schedule"
-	"github.com/yandex/pandora/lib/monitoring"
 	"go.uber.org/atomic"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -83,15 +82,15 @@ func Test_InstancePool(t *testing.T) {
 		waitDoneCalled.Store(false)
 		ctx, cancel = context.WithCancel(context.Background())
 	}
-	var justBeforeEach = func() {
-		metrics := newTestMetrics()
+	var justBeforeEach = func(metricPrefix string) {
+		metrics := NewMetrics(metricPrefix)
 		p = newPool(newNopLogger(), metrics, onWaitDone, conf)
 	}
 	_ = cancel
 
 	t.Run("shoot ok", func(t *testing.T) {
 		beforeEach()
-		justBeforeEach()
+		justBeforeEach("shoot-ok")
 
 		err := p.Run(ctx)
 		require.NoError(t, err)
@@ -121,7 +120,7 @@ func Test_InstancePool(t *testing.T) {
 
 		beforeEach()
 		beforeEachContext()
-		justBeforeEach()
+		justBeforeEach("context-canceled")
 
 		err := p.Run(ctx)
 		require.Equal(t, context.Canceled, err)
@@ -170,7 +169,7 @@ func Test_InstancePool(t *testing.T) {
 			})
 		conf.Aggregator = aggr
 
-		justBeforeEach()
+		justBeforeEach("provider-failed")
 
 		err := p.Run(ctx)
 		require.Error(t, err)
@@ -201,7 +200,7 @@ func Test_InstancePool(t *testing.T) {
 		aggr := &coremock.Aggregator{}
 		aggr.On("Run", mock.Anything, mock.Anything).Return(failErr)
 		conf.Aggregator = aggr
-		justBeforeEach()
+		justBeforeEach("aggregator-failed")
 
 		err := p.Run(ctx)
 		require.Error(t, err)
@@ -227,7 +226,7 @@ func Test_InstancePool(t *testing.T) {
 		conf.NewGun = func() (core.Gun, error) {
 			return nil, failErr
 		}
-		justBeforeEach()
+		justBeforeEach("start-instances-failed")
 
 		err := p.Run(ctx)
 		require.Error(t, err)
@@ -259,7 +258,7 @@ func Test_MultipleInstance(t *testing.T) {
 			schedule.NewOnce(2),
 			schedule.NewConst(1, 5*time.Second),
 		)
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("test_engine_1"), nil, conf)
 		ctx := context.Background()
 
 		err := pool.Run(ctx)
@@ -274,7 +273,7 @@ func Test_MultipleInstance(t *testing.T) {
 			return schedule.NewOnce(1), nil
 		}
 		conf.StartupSchedule = schedule.NewOnce(3)
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("test_engine_2"), nil, conf)
 		ctx := context.Background()
 
 		err := pool.Run(ctx)
@@ -291,7 +290,7 @@ func Test_MultipleInstance(t *testing.T) {
 			schedule.NewOnce(2),
 			schedule.NewConst(1, 2*time.Second),
 		)
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("test_engine_3"), nil, conf)
 		ctx := context.Background()
 
 		err := pool.Run(ctx)
@@ -319,14 +318,14 @@ func Test_Engine(t *testing.T) {
 		ctx, cancel = context.WithCancel(context.Background())
 	}
 
-	var justBeforeEach = func() {
-		metrics := newTestMetrics()
+	var justBeforeEach = func(metricPrefix string) {
+		metrics := NewMetrics(metricPrefix)
 		engine = New(newNopLogger(), metrics, Config{confs})
 	}
 
 	t.Run("shoot ok", func(t *testing.T) {
 		beforeEach()
-		justBeforeEach()
+		justBeforeEach("shoot-ok-2")
 
 		err := engine.Run(ctx)
 		require.NoError(t, err)
@@ -361,7 +360,7 @@ func Test_Engine(t *testing.T) {
 		}
 		beforeEach()
 		beforeEachCtx()
-		justBeforeEach()
+		justBeforeEach("context-canceled-2")
 
 		err := engine.Run(ctx)
 		require.Equal(t, err, context.Canceled)
@@ -398,7 +397,7 @@ func Test_Engine(t *testing.T) {
 		aggr.On("Run", mock.Anything, mock.Anything).Return(failErr)
 		confs[0].Aggregator = aggr
 
-		justBeforeEach()
+		justBeforeEach("one-pool-failed")
 
 		err := engine.Run(ctx)
 		require.Error(t, err)
@@ -411,7 +410,7 @@ func Test_BuildInstanceSchedule(t *testing.T) {
 	t.Run("per instance schedule", func(t *testing.T) {
 		conf, _ := newTestPoolConf()
 		conf.RPSPerInstance = true
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("per-instance-schedule"), nil, conf)
 		newInstanceSchedule, err := pool.buildNewInstanceSchedule(context.Background(), func() {
 			panic("should not be called")
 		})
@@ -428,7 +427,7 @@ func Test_BuildInstanceSchedule(t *testing.T) {
 		conf.NewRPSSchedule = func() (core.Schedule, error) {
 			return nil, scheduleCreateErr
 		}
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("shared-schedule-create-failed"), nil, conf)
 		newInstanceSchedule, err := pool.buildNewInstanceSchedule(context.Background(), func() {
 			panic("should not be called")
 		})
@@ -446,7 +445,7 @@ func Test_BuildInstanceSchedule(t *testing.T) {
 			newScheduleCalled = true
 			return schedule.NewOnce(1), nil
 		}
-		pool := newPool(newNopLogger(), newTestMetrics(), nil, conf)
+		pool := newPool(newNopLogger(), NewMetrics("shared-schedule-work"), nil, conf)
 		ctx, cancel := context.WithCancel(context.Background())
 		newInstanceSchedule, err := pool.buildNewInstanceSchedule(context.Background(), cancel)
 		require.NoError(t, err)
@@ -531,13 +530,4 @@ func newNopLogger() *zap.Logger {
 	core := zapcore.NewNopCore()
 	log := zap.New(core)
 	return log
-}
-
-func newTestMetrics() Metrics {
-	return Metrics{
-		&monitoring.Counter{},
-		&monitoring.Counter{},
-		&monitoring.Counter{},
-		&monitoring.Counter{},
-	}
 }

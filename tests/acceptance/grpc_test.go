@@ -36,7 +36,7 @@ func TestCheckGRPCReflectServer(t *testing.T) {
 		grpcimport.Import(fs)
 	})
 	pandoraLogger := testutil.NewNullLogger()
-	pandoraMetrics := newEngineMetrics("reflect")
+	pandoraMetrics := engine.NewMetrics("reflect")
 	baseFile, err := os.ReadFile("testdata/grpc/base.yaml")
 	require.NoError(t, err)
 
@@ -222,7 +222,7 @@ func (s *GrpcGunSuite) SetupSuite() {
 	})
 
 	s.log = testutil.NewNullLogger()
-	s.metrics = newEngineMetrics("grpc_suite")
+	s.metrics = engine.NewMetrics("grpc_suite")
 }
 
 func (s *GrpcGunSuite) Test_Run() {

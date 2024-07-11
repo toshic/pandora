@@ -12,8 +12,6 @@ import (
 	"github.com/yandex/pandora/cli"
 	"github.com/yandex/pandora/core"
 	"github.com/yandex/pandora/core/config"
-	"github.com/yandex/pandora/core/engine"
-	"github.com/yandex/pandora/lib/monitoring"
 	"gopkg.in/yaml.v2"
 )
 
@@ -45,15 +43,6 @@ func unmarshalConfigFile(t *testing.T, filename string, serverAddr string) map[s
 	err = yaml.Unmarshal(b.Bytes(), &mapCfg)
 	require.NoError(t, err)
 	return mapCfg
-}
-
-func newEngineMetrics(prefix string) engine.Metrics {
-	return engine.Metrics{
-		Request:        monitoring.NewCounter(prefix + "_Requests"),
-		Response:       monitoring.NewCounter(prefix + "_Responses"),
-		InstanceStart:  monitoring.NewCounter(prefix + "_UsersStarted"),
-		InstanceFinish: monitoring.NewCounter(prefix + "_UsersFinished"),
-	}
 }
 
 type aggregator struct {

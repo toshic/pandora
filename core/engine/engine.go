@@ -29,6 +29,16 @@ type InstancePoolConfig struct {
 	DiscardOverflow bool                          `config:"discard_overflow"`
 }
 
+func NewMetrics(prefix string) Metrics {
+	return Metrics{
+		Request:        monitoring.NewCounter(prefix + "_Requests"),
+		Response:       monitoring.NewCounter(prefix + "_Responses"),
+		InstanceStart:  monitoring.NewCounter(prefix + "_UsersStarted"),
+		InstanceFinish: monitoring.NewCounter(prefix + "_UsersFinished"),
+		BusyInstances:  monitoring.NewInstanceTracker(prefix + "_BusyInstances"),
+	}
+}
+
 // TODO(skipor): use something github.com/rcrowley/go-metrics based.
 // Its high level primitives like Meter can be not fast enough, but EWMAs
 // and Counters should good for that.
@@ -37,6 +47,7 @@ type Metrics struct {
 	Response       *monitoring.Counter
 	InstanceStart  *monitoring.Counter
 	InstanceFinish *monitoring.Counter
+	BusyInstances  *monitoring.InstanceTracker
 }
 
 func New(log *zap.Logger, m Metrics, conf Config) *Engine {

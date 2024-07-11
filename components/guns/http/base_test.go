@@ -19,7 +19,6 @@ import (
 	"github.com/yandex/pandora/core/aggregator/netsample"
 	"github.com/yandex/pandora/core/coretest"
 	"github.com/yandex/pandora/core/engine"
-	"github.com/yandex/pandora/lib/monitoring"
 	"github.com/yandex/pandora/lib/testutil"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -33,15 +32,6 @@ func newLogger() *zap.Logger {
 		zap.L().Fatal("Logger build failed", zap.Error(err))
 	}
 	return log
-}
-
-func newEngineMetrics(prefix string) engine.Metrics {
-	return engine.Metrics{
-		Request:        monitoring.NewCounter(prefix + "_Requests"),
-		Response:       monitoring.NewCounter(prefix + "_Responses"),
-		InstanceStart:  monitoring.NewCounter(prefix + "_UsersStarted"),
-		InstanceFinish: monitoring.NewCounter(prefix + "_UsersFinished"),
-	}
 }
 
 func TestGunSuite(t *testing.T) {
@@ -59,7 +49,7 @@ type BaseGunSuite struct {
 
 func (s *BaseGunSuite) SetupSuite() {
 	s.log = testutil.NewLogger()
-	s.metrics = newEngineMetrics("http_suite")
+	s.metrics = engine.NewMetrics("http_suite")
 }
 
 func (s *BaseGunSuite) SetupTest() {

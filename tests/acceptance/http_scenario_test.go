@@ -40,7 +40,7 @@ func (s *HTTPScenarioSuite) SetupSuite() {
 	})
 
 	s.log = testutil.NewNullLogger()
-	s.metrics = newEngineMetrics("http_scenario_suite")
+	s.metrics = engine.NewMetrics("http_scenario_suite")
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	port := os.Getenv("PORT") // TODO: how to set free port in CI?

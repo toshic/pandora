@@ -37,7 +37,7 @@ func (s *ConnectGunSuite) SetupSuite() {
 	})
 
 	s.log = testutil.NewNullLogger()
-	s.metrics = newEngineMetrics("connect_suite")
+	s.metrics = engine.NewMetrics("connect_suite")
 }
 
 func (s *ConnectGunSuite) Test_Connect() {

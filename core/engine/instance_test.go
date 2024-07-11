@@ -32,7 +32,7 @@ func Test_Instance(t *testing.T) {
 		newGun      func() (core.Gun, error)
 	)
 
-	var beforeEach = func() {
+	var beforeEach = func(metricPrefix string) {
 		provider = &coremock.Provider{}
 		aggregator = &coremock.Aggregator{}
 		gun = &coremock.Gun{}
@@ -40,7 +40,7 @@ func Test_Instance(t *testing.T) {
 		sched = &coremock.Schedule{}
 		newScheduleErr = nil
 		ctx = context.Background()
-		metrics = newTestMetrics()
+		metrics = NewMetrics(metricPrefix)
 		newSchedule = func() (core.Schedule, error) { return sched, newScheduleErr }
 		newGun = func() (core.Gun, error) { return gun, newGunErr }
 	}
@@ -85,7 +85,7 @@ func Test_Instance(t *testing.T) {
 			require.NoError(t, insCreateErr)
 		}
 		t.Run("start ok", func(t *testing.T) {
-			beforeEach()
+			beforeEach("start-ok")
 			beforeEachCtx()
 			justBeforeEachCtx()
 			justBeforeEach()
@@ -99,7 +99,7 @@ func Test_Instance(t *testing.T) {
 		})
 
 		t.Run("gun implements io.Closer / close called on instance close", func(t *testing.T) {
-			beforeEach()
+			beforeEach("gun-implements-io")
 			beforeEachCtx()
 			closeGun := mockGunCloser{gun}
 			closeGun.On("Close").Return(nil)
@@ -122,7 +122,7 @@ func Test_Instance(t *testing.T) {
 	})
 
 	t.Run("context canceled after run / start fail", func(t *testing.T) {
-		beforeEach()
+		beforeEach("context-canceled-after-run")
 
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Millisecond)
@@ -146,7 +146,7 @@ func Test_Instance(t *testing.T) {
 	})
 
 	t.Run("context canceled before run / nothing acquired and schedule not started", func(t *testing.T) {
-		beforeEach()
+		beforeEach("context-canceled-before-run")
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithCancel(ctx)
 		cancel()
@@ -162,7 +162,7 @@ func Test_Instance(t *testing.T) {
 	})
 
 	t.Run("schedule create failed / instance create failed", func(t *testing.T) {
-		beforeEach()
+		beforeEach("schedule-create-failed")
 		sched = nil
 		newScheduleErr = errors.New("test err")
 		justBeforeEach()
@@ -173,7 +173,7 @@ func Test_Instance(t *testing.T) {
 	})
 
 	t.Run("gun create failed / instance create failed", func(t *testing.T) {
-		beforeEach()
+		beforeEach("gun-create-failed")
 		gun = nil
 		newGunErr = errors.New("test err")
 		justBeforeEach()
