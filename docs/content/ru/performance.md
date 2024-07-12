@@ -1,22 +1,22 @@
 ---
 title: Производительность Pandora
 description: Результаты тестов производительности
-categories: [Best practise]
+categories: [Best practices]
 tags: [config, test, performance]
 weight: 13
 ---
 
-[Alexander Ivanov](mailto:ival.net@yandex.ru) made some performance tests for the gun itself. Here are the results.
+[Александр Иванов](mailto:ival.net@yandex.ru) провел несколько тестов производительности. Вот результаты.
 
 * Server: NGinx, 32 cores, 64G RAM.
 * Tank: 32 cores, 128G RAM.
 * Network: 1G.
 
-## HTTP requests to nginx
+## HTTP запросы в nginx
 
 
-Static pages with different sizes. Server delays implemented in Lua script, we can
-set delay time using `sleep` query parameter:
+Статические страницы разных размеров. Задержки сервера реализованы в скрипте Lua, мы можем
+установить время задержки с помощью параметра запроса `sleep`:
 
 ```lua
 server {
@@ -83,16 +83,15 @@ server {
 
 
 
-## Custom scenarios
+## Пользовательские сценарии
 
+Производительность пользовательских сценариев во многом зависит от их реализации. В некоторых наших
+тестах мы наблюдали скачки, вызванные GC. Их можно избежать, уменьшив размер распределения.
+Хорошей идеей будет оптимизировать ваши сценарии.
+В Go есть множество <https://github.com/golang/go/wiki/Performance>`_ инструментов, помогающих вам
+сделать это.
 
-Custom scenarios performance depends very much of their implementation. In some our
-test we saw spikes caused by GC. They can be avoided by reducing allocation size.
-It is a good idea to optimize your scenarios.
-Go has `a lot <https://github.com/golang/go/wiki/Performance>`_ of tools helping you
-to do this.
-
-.. note:: We used JSON-formatted ammo to specify parameters for each scenario run.
+> Мы использовали payload в формате JSON для задания параметров для каждого сценария.
 
 * **Small requests** 35k RPS. OK.
 * **Some scenario steps with big JSON bodies** 35k RPS. OK.

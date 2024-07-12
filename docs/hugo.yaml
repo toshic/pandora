@@ -142,7 +142,7 @@ params:
   # User interface configuration
   ui:
     # Set to true to disable breadcrumb navigation.
-    breadcrumb_disable: false
+    breadcrumb_disable: true
     # Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top navbar
     navbar_logo: true
     # Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.

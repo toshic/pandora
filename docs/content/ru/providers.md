@@ -1,34 +1,34 @@
 ---
-title: HTTP Ammo providers
-description: HTTP Ammo provider is a source of test data - it makes ammo object
+title: HTTP провайдер
+description: HTTP провайдер это источник тестовых данных, который создает объекты Payload
 categories: [Provider]
 tags: [provider, http]
 weight: 6
 ---
 
-HTTP Ammo provider is a source of test data: it makes ammo object.
+Провайдер HTTP является источником тестовых данных: он создает объект Payload.
 
-There is a common rule for any (built-in) provider: data supplied by ammo provider are records that will be pushed via
-established connection to external host (defined in pandora config via _pool.gun.target_ option). Thus, you cannot
-define in the ammofile to which _physical_ host your ammo will be sent.
+Существует общее правило для любого (встроенного) провайдера: данные, поставляемые провайдером патронов, - это записи, которые будут переданы через
+установленное соединение с внешним хостом (задается в конфигурации pandora через опцию _pool.gun.target_). Таким образом, вы не можете
+определить в файле payload, на какой _физический_ хост будут отправлены ваши Payload.
 
-## Test data
+## Тестовые данные
 
 ### http/json
 
-jsonline format, 1 row — 1 json-encoded ammo.
+формат jsonline, 1 строка - 1 патрон в json-кодировке.
 
-Pay attention to special header _Host_ defined `outside` of Headers dictionary.
+Обратите внимание на специальный заголовок _Host_, определенный `вне` словаря Headers.
 
-_Host_ inside Headers section will be silently ignored.
+_Host_ внутри секции Headers будет молча проигнорирован.
 
-Ammofile sample:
+Пример содержимого:
 
 ```
 {"tag": "tag1", "uri": "/", "method": "GET", "headers": {"Accept": "*/*", "Accept-Encoding": "gzip, deflate", "User-Agent": "Pandora"}, "host": "example.com"}
 ```
 
-Config sample:
+Пример конфига:
 
 ```yaml
 pools:
@@ -39,15 +39,15 @@ pools:
 
 ### raw (request-style)
 
-Raw HTTP request format. If you like to use _telnet_ firing HTTP requests, you'll love this.
-Also known as phantom's _request-style_.
+Формат Raw HTTP-запроса. Если вы любите использовать _telnet_, обстреливающий HTTP-запросы, вам понравится это.
+Также известен как _request-style_ от Phantom.
 
-File contains size-prefixed HTTP requests. Each ammo is prefixed with a header line (delimited with \n), which consists
-of two fields delimited by a space: ammo size and tag. Ammo size is in bytes (integer, including special characters like
-CR, LF). Tag is a string. You can read about this format (with detailed instructions) at
-[Yandex.Tank documentation](https://yandextank.readthedocs.io/en/latest/tutorial.html#request-style)
+Файл содержит HTTP-запросы с префиксом размера. Каждый запрос имеет строку заголовка (разделенную \n), которая состоит из
+из двух полей, разделенных пробелом: размер патрона и тег. Размер боеприпаса указывается в байтах (целое число, включая специальные символы, такие как
+CR, LF). Тег - это строка. Об этом формате (с подробными инструкциями) вы можете прочитать на сайте
+[Документация Яндекс.Танка](https://yandextank.readthedocs.io/en/latest/tutorial.html#request-style)
 
-Ammofile sample:
+Пример аммофайла:
 
 ```
 73 good
@@ -66,7 +66,7 @@ Host: xxx.tanks.example.com
 User-Agent: xxx (shell 1)
 ```
 
-Config sample:
+Пример конфига:
 
 ```yaml
 pools:
@@ -75,10 +75,10 @@ pools:
       file: ./ammofile               # ammo file path
 ```
 
-You can define common headers using special config option `headers`. Headers in ammo file have priority. Format: list of
-strings.
+Вы можете определить общие заголовки с помощью специальной опции конфигурации `headers`. 
+Заголовки в ammo-файле имеют приоритет. Формат: список строк.
 
-Example:
+Пример:
 
 ```yaml
 pools:
@@ -92,9 +92,9 @@ pools:
 
 ### uri-style
 
-List of URIs and headers
+Список URIs и заголовков
 
-Ammofile sample:
+Пример содержимого:
 
 ```
 [Connection: close]
@@ -107,7 +107,7 @@ Ammofile sample:
 /buy/?rt=0&station_to=7&station_from=9
 ```
 
-Config sample:
+Пример конфига:
 
 
 ```yaml
@@ -117,10 +117,10 @@ pools:
       file: ./ammofile               # ammo file path
 ```
 
-You can define common headers using special config option `headers`. Headers in ammo file have priority. Format: list of
-strings.
+Вы можете определить общие заголовки с помощью специальной опции конфигурации `headers`. 
+Заголовки в ammo-файле имеют приоритет. Формат: список строк.
 
-Example:
+Пример:
 
 ```yaml
 pools:
@@ -132,11 +132,11 @@ pools:
         - "[User-Agent: some user agent]"
 ```
 
-## Features
+## Возможности
 
-### Ammo filters
+### Фильтры
 
-Each http ammo provider lets you choose specific ammo for your test from ammo file with _chosencases_ setting:
+Каждый провайдер http позволяет выбрать конкретный ammo для вашего теста из файла ammo с настройкой _chosencases_:
 
 ```yaml
 pools:
@@ -146,7 +146,7 @@ pools:
       file: ./ammofile                 # ammo file path
 ```
 
-Tags are defined in ammo files as shown below:
+Теги определяются в файлах патронов, как показано ниже:
 
 #### http/json:
 
@@ -169,10 +169,10 @@ GET / HTTP/1.0
 /buy tag2
 ```
 
-### HTTP Ammo middlewares
+### HTTP middlewares
 
-HTTP Ammo providers have the ability to modify HTTP request just before execution.
-Middlewares are used for this purpose. An example of Middleware that sets the Date header in a request.
+Провайдеры HTTP имеют возможность модифицировать HTTP-запрос непосредственно перед выполнением.
+Для этого используются Middlewares. Пример Middleware, устанавливающего заголовок Date в запросе.
 
 ```yaml
 pools:
@@ -185,11 +185,12 @@ pools:
           headerName: Date
 ```
 
-List of built-in HTTP Ammo middleware:
+Список встроенных Middlewares HTTP:
 
 - header/date
 
-You can create your own middleware. But in order to do that you need to register them in custom pandora
+Вы можете создавать собственные промежуточные модули. 
+Но для этого вам нужно зарегистрировать их в [custom pandora](generator/custom.md)
 
 ```go
 import (
@@ -203,19 +204,19 @@ httpRegister.HTTPMW("header/date", func (cfg headerdate.Config) (middleware.Midd
 })
 ```
 
-For more on how to write custom pandora, see [Custom](custom.md).
+Подробнее о том, как писать пользовательские пандоры, читайте в [Custom](generator/custom.md).
 
-### HTTP Ammo preloaded
+### Предварительная загрузка HTTP-патронов
 
-Pandora's architecture is designed for high performance. To achieve high performance, Pandora prepares ammo for each
-instance.
+Архитектура Pandora рассчитана на высокую производительность. 
+Для достижения высокой производительности Pandora подготавливает payload для каждого экземпляра.
 
-If you have **large requests** and **a large number of instances**, Pandora starts using a lot of memory.
+Если у вас **большие запросы** и **большое количество экземпляров**, Pandora начинает использовать много памяти.
 
-For this case HTTP providers has a ``preload`` flag. If it's set to ``true``, the provider will load the ammo file into
-memory and use the body of the request from memory
+На этот случай у HTTP-провайдеров есть флаг `preload`. Если он установлен в `true`, провайдер загрузит файл патронов в
+память и использовать тело запроса из памяти.
 
-Example:
+Пример:
 
 ```yaml
 pools:

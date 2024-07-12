@@ -3,7 +3,7 @@ title: Scenario generator / HTTP
 description: Scenario generator / HTTP
 categories: [generator]
 tags: [scenario, generator, http]
-weight: 9
+weight: 3
 ---
 
 ## Конфигурация

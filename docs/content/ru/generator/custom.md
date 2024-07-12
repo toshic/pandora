@@ -3,26 +3,26 @@ title: Custom guns
 description: Custom guns
 categories: [Generator]
 tags: [generator]
-weight: 11
+weight: 99
 ---
 
-## Basic tutorial
+## Основы
 
-You can create you own Golang-based gun with _pandora_.
+Вы можете создать свою собственный генератор на базе Golang с помощью _pandora_.
 
-There is an example of custom gun shooting via gRPC.
+Здесь приведен пример стрельбы из пользовательской генератора через gRPC.
 
-We create a new gun and define `shoot` method for it w/ our test logic.
+Мы создаем новый генератор и определяем для нее метод `shoot` в нашей тестовой логике.
 
-You can find examples of custom guns' code below:
--  [gRPC](#gRPC)
--  [Websockets](#Websockets)
+Примеры кода пользовательских пушек вы можете найти ниже:
+- [gRPC](#gRPC)
+- [Websockets](#Websockets)
 
-Now it's time to compile our gun. Install deps and compile your custom gun file (`go build my_custom_gun.go`).
+Теперь пришло время скомпилировать наш генератор. Установите deps и скомпилируйте файл вашей пользовательского генератора (`go build my_custom_gun.go`).
 
-After that step you'll get `my_custom_gun` binary file, it is compiled pandora with your custom gun inside.
+После этого шага вы получите бинарный файл `my_custom_gun`, это скомпилированная pandora с вашей пользовательским генератором внутри.
 
-Now its time to create `load.yaml`:
+Теперь пришло время создать `load.yaml`:
 
 ```yaml
 pools:
@@ -45,7 +45,7 @@ pools:
     log:
 ```
 
-And create ammofile `./json.ammo`:
+И создать файл payload `./json.ammo`:
 
 ```json
 {"tag": "/MyCase1", "Param1": "146837693,146837692,146837691"}
@@ -53,7 +53,7 @@ And create ammofile `./json.ammo`:
 ```
 
 
-We are ready to shoot. Try it.
+Теперь можно написать код генератора
 
 
 ## gRPC

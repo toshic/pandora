@@ -3,7 +3,7 @@ title: Scenario generator / gRPC
 description: Scenario generator / gRPC
 categories: [generator]
 tags: [scenario, generator, grpc]
-weight: 10
+weight: 4
 ---
 
 ## Конфигурация

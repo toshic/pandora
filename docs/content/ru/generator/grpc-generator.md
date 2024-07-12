@@ -3,7 +3,7 @@ title: gRPC генератор
 description: Настройка grpc генератора
 categories: [Generator]
 tags: [generator, grpc]
-weight: 8
+weight: 2
 ---
 
 Полный конфиг grpc генератора

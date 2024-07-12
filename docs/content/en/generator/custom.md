@@ -3,12 +3,8 @@ title: Custom guns
 description: Custom guns
 categories: [Generator]
 tags: [generator]
-weight: 11
+weight: 99
 ---
-
-- [Basic tutorial](#basic-tutorial)
-- [gRPC](#grpc)
-- [Websockets](#websockets)
 
 ## Basic tutorial
 
@@ -19,8 +15,8 @@ There is an example of custom gun shooting via gRPC.
 We create a new gun and define `shoot` method for it w/ our test logic.
 
 You can find examples of custom guns' code below:
--  [gRPC](#gRPC)
--  [Websockets](#Websockets)
+- [gRPC](#gRPC)
+- [Websockets](#Websockets)
 
 Now it's time to compile our gun. Install deps and compile your custom gun file (`go build my_custom_gun.go`).
 

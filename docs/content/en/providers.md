@@ -189,7 +189,7 @@ List of built-in HTTP Ammo middleware:
 
 - header/date
 
-You can create your own middleware. But in order to do that you need to register them in custom pandora
+You can create your own middleware. But in order to do that you need to register them in [custom pandora](generator/custom.md)
 
 ```go
 import (
@@ -203,7 +203,7 @@ httpRegister.HTTPMW("header/date", func (cfg headerdate.Config) (middleware.Midd
 })
 ```
 
-For more on how to write custom pandora, see [Custom](custom.md).
+For more on how to write custom pandora, see [Custom](generator/custom.md).
 
 ### HTTP Ammo preloaded
 
@@ -212,7 +212,7 @@ instance.
 
 If you have **large requests** and **a large number of instances**, Pandora starts using a lot of memory.
 
-For this case HTTP providers has a ``preload`` flag. If it's set to ``true``, the provider will load the ammo file into
+For this case HTTP providers has a `preload` flag. If it's set to `true`, the provider will load the ammo file into
 memory and use the body of the request from memory
 
 Example:

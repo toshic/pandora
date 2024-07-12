@@ -92,7 +92,7 @@ It is a good idea to optimize your scenarios.
 Go has `a lot <https://github.com/golang/go/wiki/Performance>`_ of tools helping you
 to do this.
 
-.. note:: We used JSON-formatted ammo to specify parameters for each scenario run.
+> We used JSON-formatted ammo to specify parameters for each scenario run.
 
 * **Small requests** 35k RPS. OK.
 * **Some scenario steps with big JSON bodies** 35k RPS. OK.

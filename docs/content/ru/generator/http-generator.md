@@ -1,9 +1,9 @@
 ---
 title: HTTP генератор
 description: Настройка http/http2 генератора
-categories: [Config]
-tags: [config, docs, http]
-weight: 9
+categories: [Generator]
+tags: [generator, http]
+weight: 1
 ---
 
 Полный конфиг http (http2) генератора
