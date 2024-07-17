@@ -8,10 +8,10 @@ weight: 14
 
 ## Схема
 
-Код схемы доступен [здесь](../../images/architecture.graphml).
+Код схемы доступен [здесь](../../../images/architecture.graphml).
 Его можно открыть и редактировать в редакторе [YeD](https://www.yworks.com/en/products/yfiles/yed/).
 
-![architectural scheme](../../images/architecture.png)
+![architectural scheme](../../../images/architecture.png)
 
 Pandora - это набор компонентов, взаимодействующих друг с другом с помощью Go каналов.
 

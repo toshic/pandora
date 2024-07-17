@@ -1,15 +1,12 @@
 pools:
-  - id: ""
+  - id: "dummy"
     ammo:
-      file: testdata/http/payload.uri
-      type: uri
+      type: dummy
     result:
       type: discard
     gun:
-      target: {{.target}}
-      type: connect
-      answlog:
-        enabled: false
+      type: dummy
+      sleep: 10ms
     rps-per-instance: false
     rps:
       - times: 2

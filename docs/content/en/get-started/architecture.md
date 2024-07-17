@@ -8,10 +8,10 @@ weight: 14
 
 ## Architectural scheme
 
-You can download architectural scheme source [here](../images/architecture.graphml).
+You can download architectural scheme source [here](../../images/architecture.graphml).
 Open it with [YeD](https://www.yworks.com/en/products/yfiles/yed/) editor.
 
-![architectural scheme](../images/architecture.png)
+![architectural scheme](../../images/architecture.png)
 
 Pandora is a set of components talking to each other through Go channels. There are different types of components.
 

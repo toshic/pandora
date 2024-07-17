@@ -8,12 +8,26 @@ import (
 	"testing"
 	"text/template"
 
+	"github.com/spf13/afero"
 	"github.com/stretchr/testify/require"
 	"github.com/yandex/pandora/cli"
+	grpc "github.com/yandex/pandora/components/grpc/import"
+	"github.com/yandex/pandora/components/guns"
+	phttpimport "github.com/yandex/pandora/components/phttp/import"
 	"github.com/yandex/pandora/core"
 	"github.com/yandex/pandora/core/config"
+	coreimport "github.com/yandex/pandora/core/import"
 	"gopkg.in/yaml.v2"
 )
+
+func importDependencies(fs afero.Fs) func() {
+	return func() {
+		coreimport.Import(fs)
+		phttpimport.Import(fs)
+		grpc.Import(fs)
+		guns.Import(fs)
+	}
+}
 
 func parseConfigFile(t *testing.T, filename string, serverAddr string) *cli.CliConfig {
 	t.Helper()

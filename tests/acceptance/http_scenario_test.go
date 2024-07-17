@@ -9,10 +9,7 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/suite"
-	grpc "github.com/yandex/pandora/components/grpc/import"
-	phttpimport "github.com/yandex/pandora/components/phttp/import"
 	"github.com/yandex/pandora/core/engine"
-	coreimport "github.com/yandex/pandora/core/import"
 	"github.com/yandex/pandora/examples/http/server"
 	"github.com/yandex/pandora/lib/testutil"
 	"go.uber.org/zap"
@@ -33,11 +30,7 @@ type HTTPScenarioSuite struct {
 
 func (s *HTTPScenarioSuite) SetupSuite() {
 	s.fs = afero.NewOsFs()
-	testOnce.Do(func() {
-		coreimport.Import(s.fs)
-		phttpimport.Import(s.fs)
-		grpc.Import(s.fs)
-	})
+	testOnce.Do(importDependencies(s.fs))
 
 	s.log = testutil.NewNullLogger()
 	s.metrics = engine.NewMetrics("http_scenario_suite")

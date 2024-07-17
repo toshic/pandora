@@ -14,10 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/yandex/pandora/cli"
-	grpcimport "github.com/yandex/pandora/components/grpc/import"
-	phttpimport "github.com/yandex/pandora/components/phttp/import"
 	"github.com/yandex/pandora/core/engine"
-	coreimport "github.com/yandex/pandora/core/import"
 	"github.com/yandex/pandora/examples/grpc/server"
 	"github.com/yandex/pandora/lib/pointer"
 	"github.com/yandex/pandora/lib/testutil"
@@ -30,11 +27,7 @@ import (
 
 func TestCheckGRPCReflectServer(t *testing.T) {
 	fs := afero.NewOsFs()
-	testOnce.Do(func() {
-		coreimport.Import(fs)
-		phttpimport.Import(fs)
-		grpcimport.Import(fs)
-	})
+	testOnce.Do(importDependencies(fs))
 	pandoraLogger := testutil.NewNullLogger()
 	pandoraMetrics := engine.NewMetrics("reflect")
 	baseFile, err := os.ReadFile("testdata/grpc/base.yaml")
@@ -215,11 +208,7 @@ type GrpcGunSuite struct {
 
 func (s *GrpcGunSuite) SetupSuite() {
 	s.fs = afero.NewOsFs()
-	testOnce.Do(func() {
-		coreimport.Import(s.fs)
-		phttpimport.Import(s.fs)
-		grpcimport.Import(s.fs)
-	})
+	testOnce.Do(importDependencies(s.fs))
 
 	s.log = testutil.NewNullLogger()
 	s.metrics = engine.NewMetrics("grpc_suite")
