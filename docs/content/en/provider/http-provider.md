@@ -3,7 +3,7 @@ title: HTTP Ammo providers
 description: HTTP Ammo provider is a source of test data - it makes ammo object
 categories: [Provider]
 tags: [provider, http]
-weight: 6
+weight: 10
 ---
 
 HTTP Ammo provider is a source of test data: it makes ammo object.

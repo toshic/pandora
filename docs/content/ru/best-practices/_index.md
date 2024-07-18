@@ -2,5 +2,5 @@
 title: Лучшие практики
 description:
 categories: [Best practices]
-weight: 6
+weight: 12
 ---

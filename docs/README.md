@@ -1,4 +1,12 @@
-# Docsy Example
+# Pandora documentation with Docsy theme
+
+## Quick start
+
+```shell
+hugo server
+```
+
+## Docsy
 
 [Docsy][] is a [Hugo theme module][] for technical documentation sites, providing easy
 site navigation, structure, and more. This **Docsy Example Project** uses the Docsy

@@ -3,7 +3,7 @@ title: HTTP провайдер
 description: HTTP провайдер это источник тестовых данных, который создает объекты Payload
 categories: [Provider]
 tags: [provider, http]
-weight: 6
+weight: 10
 ---
 
 Провайдер HTTP является источником тестовых данных: он создает объект Payload.

@@ -58,6 +58,6 @@ You can also combine two methods mentioned above.
 Instances takes an ammo, waits for a Scheduler tick and then shoots with a Gun it has. Gun is a tool that sends
 a request to your service and measures the parameters (time, error codes, etc.) of the response.
 
-### Aggregator
+### Агрегатор
 
-Aggregator collects measured samples and saves them somewhere.
+Агрегатор собирает замеры запросов и сохраняет их в каком-нибудь месте.
