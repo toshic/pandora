@@ -336,7 +336,6 @@ request "your_request_name" {
 
 In templates you can use the result of this postprocessor as
 
-Translated with DeepL.com (free version)
 ```gotemplate
 `{% raw %}{{.request.your_request_name.postprocessor.auth}}{% endraw %}`
 `{% raw %}{{.request.your_request_name.postprocessor.traceID}}{% endraw %}`
