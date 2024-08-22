@@ -78,7 +78,7 @@ replace github.com/insomniacslk/dhcp => github.com/insomniacslk/dhcp v0.0.0-2021
 
 replace cloud.google.com/go/pubsub => cloud.google.com/go/pubsub v1.30.0
 
-replace google.golang.org/grpc => google.golang.org/grpc v1.56.3
+replace google.golang.org/grpc => google.golang.org/grpc v1.61.2
 
 replace github.com/grpc-ecosystem/grpc-gateway/v2 => github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 
