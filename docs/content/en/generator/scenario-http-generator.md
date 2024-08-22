@@ -184,7 +184,7 @@ See [Locals article](scenario/locals.md)
 
 ### Requests
 
-Поля
+Fields
 
 - method
 - uri
@@ -460,4 +460,4 @@ Follow - [Variable sources](scenario/variable_source.md)
 # References
 
 - [HTTP generator](http-generator.md)
-- [Практики использования](best-practices)
+- [Best practices](best-practices)
