@@ -90,36 +90,71 @@ func (s *Sample) SetUserDuration(d time.Duration) {
 	s.setDuration(keyRTTMicro, d)
 }
 
+func (s *Sample) GetUserDuration() int {
+	return s.get(keyRTTMicro)
+}
 func (s *Sample) SetUserProto(code int) {
 	s.set(keyProtoCode, code)
+}
+
+func (s *Sample) GetUserProto() int {
+	return s.get(keyProtoCode)
 }
 
 func (s *Sample) SetUserNet(code int) {
 	s.set(keyErrno, code)
 }
 
+func (s *Sample) GetUserNet() int {
+	return s.get(keyErrno)
+}
+
 func (s *Sample) SetConnectTime(d time.Duration) {
 	s.setDuration(keyConnectMicro, d)
+}
+
+func (s *Sample) GetConnectTime() int {
+	return s.get(keyConnectMicro)
 }
 
 func (s *Sample) SetSendTime(d time.Duration) {
 	s.setDuration(keySendMicro, d)
 }
 
+func (s *Sample) GetSendTime() int {
+	return s.get(keySendMicro)
+}
+
 func (s *Sample) SetLatency(d time.Duration) {
 	s.setDuration(keyLatencyMicro, d)
+}
+
+func (s *Sample) GetLatency() int {
+	return s.get(keyLatencyMicro)
 }
 
 func (s *Sample) SetReceiveTime(d time.Duration) {
 	s.setDuration(keyReceiveMicro, d)
 }
 
+func (s *Sample) GetReceiveTime() int {
+	return s.get(keyReceiveMicro)
+}
+
 func (s *Sample) SetRequestBytes(b int) {
 	s.set(keyRequestBytes, b)
 }
 
+func (s *Sample) GetRequestBytes() int {
+	return s.get(keyRequestBytes)
+}
+
 func (s *Sample) SetResponseBytes(b int) {
 	s.set(keyResponseBytes, b)
+}
+
+func (s *Sample) GetResponseBytes() int {
+	return s.get(keyResponseBytes)
 }
 
 func (s *Sample) String() string {
