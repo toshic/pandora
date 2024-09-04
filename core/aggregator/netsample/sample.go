@@ -90,7 +90,7 @@ func (s *Sample) SetUserDuration(d time.Duration) {
 	s.setDuration(keyRTTMicro, d)
 }
 
-func (s *Sample) GetUserDurationMiliseconds() int {
+func (s *Sample) GetUserDurationMilliseconds() int {
 	return s.get(keyRTTMicro)
 }
 func (s *Sample) SetUserProto(code int) {
