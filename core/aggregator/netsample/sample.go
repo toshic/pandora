@@ -90,7 +90,7 @@ func (s *Sample) SetUserDuration(d time.Duration) {
 	s.setDuration(keyRTTMicro, d)
 }
 
-func (s *Sample) GetUserDurationMilliseconds() int {
+func (s *Sample) GetUserDurationMicroseconds() int {
 	return s.get(keyRTTMicro)
 }
 func (s *Sample) SetUserProto(code int) {
@@ -113,7 +113,7 @@ func (s *Sample) SetConnectTime(d time.Duration) {
 	s.setDuration(keyConnectMicro, d)
 }
 
-func (s *Sample) GetConnectTime() int {
+func (s *Sample) GetConnectTimeMicroseconds() int {
 	return s.get(keyConnectMicro)
 }
 
@@ -121,7 +121,7 @@ func (s *Sample) SetSendTime(d time.Duration) {
 	s.setDuration(keySendMicro, d)
 }
 
-func (s *Sample) GetSendTime() int {
+func (s *Sample) GetSendTimeMicroseconds() int {
 	return s.get(keySendMicro)
 }
 
@@ -129,7 +129,7 @@ func (s *Sample) SetLatency(d time.Duration) {
 	s.setDuration(keyLatencyMicro, d)
 }
 
-func (s *Sample) GetLatency() int {
+func (s *Sample) GetLatencyMicroseconds() int {
 	return s.get(keyLatencyMicro)
 }
 
@@ -137,7 +137,7 @@ func (s *Sample) SetReceiveTime(d time.Duration) {
 	s.setDuration(keyReceiveMicro, d)
 }
 
-func (s *Sample) GetReceiveTime() int {
+func (s *Sample) GetReceiveTimeMicroseconds() int {
 	return s.get(keyReceiveMicro)
 }
 
