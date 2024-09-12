@@ -86,18 +86,18 @@ func (i *instance) Run(ctx context.Context) (recoverErr error) {
 			if !waiter.Wait(ctx) {
 				return nil
 			}
+			i.metrics.Request.Add(1)
 			if !i.discardOverflow || !waiter.IsSlowDown(ctx) {
-				i.metrics.Request.Add(1)
 				i.metrics.BusyInstances.OnStart(i.id)
 				defer i.metrics.BusyInstances.OnFinish(i.id)
 				if tag.Debug {
 					i.log.Debug("Shooting", zap.Any("ammo", ammo))
 				}
 				i.gun.Shoot(ammo)
-				i.metrics.Response.Add(1)
 			} else {
 				i.aggregator.Report(netsample.DiscardedShootSample())
 			}
+			i.metrics.Response.Add(1)
 			return nil
 		}()
 		if err != nil {
