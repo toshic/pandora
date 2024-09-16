@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: run-perftests
         name: Run Pandora Performance Tests
-        uses: yandex-cloud/yc-github-loadtesting-ci/test-suite@alpha-fixes
+        uses: yandex-cloud/yc-github-loadtesting-ci/test-suite@v1-beta
         with:
           action-log-level: INFO
           auth-key-json-base64: ${{ secrets.YC_LOADTESTING_KEY_JSON_BASE64 }}
