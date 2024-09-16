@@ -1,9 +1,8 @@
 name: Performance tests
 
 on:
-  - push
-#  release:
-#    types: [ created ]
+  release:
+    types: [ created ]
 
 env:
   AWS_ENDPOINT_URL: https://storage.yandexcloud.net
@@ -60,15 +59,15 @@ jobs:
             "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep0ms-overflow-false"
             "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep50ms-overflow-false"
             "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-300inst-sleep0ms-overflow-false"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep0ms-overflow-true"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep50ms-overflow-true"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-300inst-sleep0ms-overflow-true"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-300inst-sleep0ms-overflow-false"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep0ms-overflow-false"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep50ms-overflow-false"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-300inst-sleep0ms-overflow-true"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep0ms-overflow-true"
-          # "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep50ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep0ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-2000inst-sleep50ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-grpc-300inst-sleep0ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-300inst-sleep0ms-overflow-false"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep0ms-overflow-false"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep50ms-overflow-false"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-300inst-sleep0ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep0ms-overflow-true"
+            "${{ env.PERFTESTS_ROOT }}/pandora-perf-http-uri-2000inst-sleep50ms-overflow-true"
 
       - uses: actions/upload-artifact@v4
         if: always()
