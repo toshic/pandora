@@ -3,6 +3,7 @@ autostop:
   autostop:
     - quantile (50,11ms,12s)
     - instances(300,10s)
+    - limit(120s)
   package: yandextank.plugins.Autostop
   report_file: autostop_report.txt
 uploader:

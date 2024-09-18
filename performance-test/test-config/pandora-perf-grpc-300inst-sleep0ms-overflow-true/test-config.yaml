@@ -2,6 +2,7 @@ autostop:
   enabled: true
   autostop:
     - net(777, 1100, 7s)
+    - limit(120s)
   package: yandextank.plugins.Autostop
   report_file: autostop_report.txt
 uploader:
