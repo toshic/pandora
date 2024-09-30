@@ -67,31 +67,30 @@ package main
 // and protobuf contracts for your grpc service
 
 import (
-	"log"
+	phttp "a.yandex-team.ru/load/projects/pandora/components/phttp/import"
+	coreimport "a.yandex-team.ru/load/projects/pandora/core/import"
 	"context"
+	"log"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/satori/go.uuid"
 	"github.com/spf13/afero"
 	"google.golang.org/grpc"
 	pb "my_package/my_protobuf_contracts"
 
 	"github.com/yandex/pandora/cli"
-	"github.com/yandex/pandora/components/phttp/import"
 	"github.com/yandex/pandora/core"
 	"github.com/yandex/pandora/core/aggregator/netsample"
-	"github.com/yandex/pandora/core/import"
 	"github.com/yandex/pandora/core/register"
 )
 
 type Ammo struct {
-	Tag         string
-	Param1      string
-	Param2      string
-	Param3      string
+	Tag    string
+	Param1 string
+	Param2 string
+	Param3 string
 }
 
 type Sample struct {
@@ -136,7 +135,6 @@ func (g *Gun) Shoot(ammo core.Ammo) {
 	customAmmo := ammo.(*Ammo)
 	g.shoot(customAmmo)
 }
-
 
 func (g *Gun) case1_method(client pb.MyClient, ammo *Ammo) int {
 	code := 0
@@ -188,7 +186,7 @@ func (g *Gun) case2_method(client pb.MyClient, ammo *Ammo) int {
 		item_id,
 		warehouse_id,
 		1,
-		&timestamp.Timestamp{time.Now().Unix(), 111}
+		&timestamp.Timestamp{time.Now().Unix(), 111},
 	})
 
 	out2, err3 := client.GetSomeDataSecond(
@@ -204,7 +202,6 @@ func (g *Gun) case2_method(client pb.MyClient, ammo *Ammo) int {
 	if out2 != nil {
 		code = 200
 	}
-
 
 	return code
 }
@@ -255,39 +252,27 @@ func main() {
 ## Websockets
 
 ```go
-// create a package
 package main
 
-// import some pandora stuff
-// and stuff you need for your scenario
-// and protobuf contracts for your grpc service
-
 import (
+	phttp "a.yandex-team.ru/load/projects/pandora/components/phttp/import"
+	coreimport "a.yandex-team.ru/load/projects/pandora/core/import"
 	"log"
-	"context"
-	"strconv"
-	"strings"
+	"math/rand"
+	"net/url"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/satori/go.uuid"
+	"github.com/gorilla/websocket"
 	"github.com/spf13/afero"
-	"google.golang.org/grpc"
-	pb "my_package/my_protobuf_contracts"
 
 	"github.com/yandex/pandora/cli"
-	"github.com/yandex/pandora/components/phttp/import"
 	"github.com/yandex/pandora/core"
 	"github.com/yandex/pandora/core/aggregator/netsample"
-	"github.com/yandex/pandora/core/import"
 	"github.com/yandex/pandora/core/register"
 )
 
 type Ammo struct {
-	Tag         string
-	Param1      string
-	Param2      string
-	Param3      string
+	Tag string
 }
 
 type Sample struct {
@@ -296,12 +281,13 @@ type Sample struct {
 }
 
 type GunConfig struct {
-	Target string `validate:"required"` // Configuration will fail, without target defined
+	Target  string `validate:"required"`
+	Handler string `validate:"required"` // Configuration will fail, without target defined
 }
 
 type Gun struct {
 	// Configured on construction.
-	client grpc.ClientConn
+	client websocket.Conn
 	conf   GunConfig
 	// Configured on Bind, before shooting
 	aggr core.Aggregator // May be your custom Aggregator.
@@ -313,118 +299,63 @@ func NewGun(conf GunConfig) *Gun {
 }
 
 func (g *Gun) Bind(aggr core.Aggregator, deps core.GunDeps) error {
-	// create gRPC stub at gun initialization
-	conn, err := grpc.Dial(
-		g.conf.Target,
-		grpc.WithInsecure(),
-		grpc.WithTimeout(time.Second),
-		grpc.WithUserAgent("load test, pandora custom shooter"))
+	targetPath := url.URL{Scheme: "ws", Host: g.conf.Target, Path: g.conf.Handler}
+	sample := netsample.Acquire("connection")
+	code := 0
+	rand.Seed(time.Now().Unix())
+	conn, _, err := websocket.DefaultDialer.Dial(
+		targetPath.String(),
+		nil,
+	)
 	if err != nil {
-		log.Fatalf("FATAL: %s", err)
+		log.Printf("dial err FATAL %s:", err)
+		code = 500
+	} else {
+		code = 200
 	}
 	g.client = *conn
 	g.aggr = aggr
 	g.GunDeps = deps
-	return nil
-}
-
-func (g *Gun) Shoot(ammo core.Ammo) {
-	customAmmo := ammo.(*Ammo)
-	g.shoot(customAmmo)
-}
-
-
-func (g *Gun) case1_method(client pb.MyClient, ammo *Ammo) int {
-	code := 0
-	// prepare list of ids from ammo
-	var itemIDs []int64
-	for _, id := range strings.Split(ammo.Param1, ",") {
-		if id == "" {
-			continue
-		}
-		itemID, err := strconv.ParseInt(id, 10, 64)
-		if err != nil {
-			log.Printf("Ammo parse FATAL: %s", err)
-			code = 314
-		}
-		itemIDs = append(itemIDs, itemID)
-	}
-
-	out, err := client.GetSomeData(
-		context.TODO(), &pb.ItemsRequest{
-			itemIDs})
-
-	if err != nil {
-		log.Printf("FATAL: %s", err)
-		code = 500
-	}
-
-	if out != nil {
-		code = 200
-	}
-	return code
-}
-
-func (g *Gun) case2_method(client pb.MyClient, ammo *Ammo) int {
-	code := 0
-	// prepare item_id and warehouse_id
-	item_id, err := strconv.ParseInt(ammo.Param1, 10, 0)
-	if err != nil {
-		log.Printf("Failed to parse ammo FATAL", err)
-		code = 314
-	}
-	warehouse_id, err2 := strconv.ParseInt(ammo.Param2, 10, 0)
-	if err2 != nil {
-		log.Printf("Failed to parse ammo FATAL", err2)
-		code = 314
-	}
-
-	items := []*pb.SomeItem{}
-	items = append(items, &pb.SomeItem{
-		item_id,
-		warehouse_id,
-		1,
-		&timestamp.Timestamp{time.Now().Unix(), 111}
-	})
-
-	out2, err3 := client.GetSomeDataSecond(
-		context.TODO(), &pb.SomeRequest{
-			uuid.Must(uuid.NewV4()).String(),
-			1,
-			items})
-	if err3 != nil {
-		log.Printf("FATAL", err3)
-		code = 316
-	}
-
-	if out2 != nil {
-		code = 200
-	}
-
-
-	return code
-}
-
-func (g *Gun) shoot(ammo *Ammo) {
-	code := 0
-	sample := netsample.Acquire(ammo.Tag)
-
-	conn := g.client
-	client := pb.NewClient(&conn)
-
-	switch ammo.Tag {
-	case "/MyCase1":
-		code = g.case1_method(client, ammo)
-	case "/MyCase2":
-		code = g.case2_method(client, ammo)
-	default:
-		code = 404
-	}
-
 	defer func() {
 		sample.SetProtoCode(code)
 		g.aggr.Report(sample)
 	}()
+
+	go func() {
+		for {
+			_, message, err := conn.ReadMessage()
+			if err != nil {
+				log.Println("read:", err)
+				code = 400
+				return
+			}
+			log.Printf("recv: %s", message)
+		}
+	}()
+
+	err = conn.WriteMessage(websocket.TextMessage, []byte("some websocket connection initialization text, e.g. token"))
+	if err != nil {
+		log.Println("write:", err)
+	}
+	return nil
+}
+
+func (g *Gun) Shoot(ammo core.Ammo) {
+	sample := netsample.Acquire("message")
+	code := 0
+	conn := g.client
+	err := conn.WriteMessage(websocket.TextMessage, []byte("test_message"))
+	if err != nil {
+		log.Println("connection closed", err)
+		code = 600
+	} else {
+		code = 200
+	}
+	func() {
+		sample.SetProtoCode(code)
+		g.aggr.Report(sample)
+	}()
+
 }
 
 func main() {
@@ -436,7 +367,7 @@ func main() {
 	phttp.Import(fs)
 
 	// Custom imports. Integrate your custom types into configuration system.
-	coreimport.RegisterCustomJSONProvider("custom_provider", func() core.Ammo { return &Ammo{} })
+	coreimport.RegisterCustomJSONProvider("ammo_provider", func() core.Ammo { return &Ammo{} })
 
 	register.Gun("my_custom_gun_name", NewGun, func() GunConfig {
 		return GunConfig{
