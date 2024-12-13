@@ -81,7 +81,7 @@ func Test_StackExtractCore(t *testing.T) {
 
 	t.Run("stack in with", func(t *testing.T) {
 		const sampleErrMsg = "stacked error msg"
-		sampleCause := fmt.Errorf(sampleErrMsg)
+		sampleCause := errors.New(sampleErrMsg)
 		sampleErr := errors.WithStack(sampleCause)
 		sampleStack := fmt.Sprintf("%+v", sampleErr.(stackedErr).StackTrace())
 
