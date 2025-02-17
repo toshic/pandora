@@ -10,7 +10,7 @@ require (
 	github.com/c2h5oh/datasize v0.0.0-20220606134207-859f65c6625b
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052
 	github.com/facebookgo/stackerr v0.0.0-20150612192056-c2fcf88613f4
-	github.com/gofrs/uuid v4.2.0+incompatible
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/golang/protobuf v1.5.4
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/hcl/v2 v2.16.2
@@ -20,12 +20,12 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.11.0
 	github.com/spf13/viper v1.19.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/zclconf/go-cty v1.13.2
 	go.uber.org/atomic v1.11.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
-	golang.org/x/net v0.29.0
+	golang.org/x/net v0.33.0
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.34.2
@@ -54,7 +54,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/rogpeppe/go-internal v1.12.0 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
@@ -65,14 +65,16 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240822170219-fc7c04adadcd // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+exclude github.com/keybase/go.dbus v0.0.0-20220506165403-5aa21ea2c23a
 
 replace github.com/insomniacslk/dhcp => github.com/insomniacslk/dhcp v0.0.0-20210120172423-cc9239ac6294
 
@@ -153,3 +155,7 @@ replace github.com/distribution/reference => github.com/distribution/reference v
 replace github.com/jackc/pgconn => github.com/jackc/pgconn v1.14.0
 
 replace github.com/jackc/pgproto3/v2 => github.com/jackc/pgproto3/v2 v2.3.2
+
+replace github.com/nexus-rpc/sdk-go => github.com/nexus-rpc/sdk-go v0.0.7
+
+replace github.com/mattn/go-sqlite3 => github.com/mattn/go-sqlite3 v1.14.24
