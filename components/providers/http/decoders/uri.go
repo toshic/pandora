@@ -17,13 +17,19 @@ import (
 )
 
 func newURIDecoder(file io.ReadSeeker, cfg config.Config, decodedConfigHeaders http.Header) *uriDecoder {
+	scanner := bufio.NewScanner(file)
+	if cfg.MaxAmmoSize != 0 {
+		var buffer []byte
+		scanner.Buffer(buffer, cfg.MaxAmmoSize)
+	}
+
 	return &uriDecoder{
 		protoDecoder: protoDecoder{
 			file:                 file,
 			config:               cfg,
 			decodedConfigHeaders: decodedConfigHeaders,
 		},
-		scanner: bufio.NewScanner(file),
+		scanner: scanner,
 		Header:  http.Header{},
 		pool:    &sync.Pool{New: func() any { return &ammo.Ammo{} }},
 	}
@@ -106,6 +112,10 @@ func (d *uriDecoder) Scan(ctx context.Context) (DecodedAmmo, error) {
 					return nil, err
 				}
 				d.scanner = bufio.NewScanner(d.file)
+				if d.config.MaxAmmoSize != 0 {
+					var buffer []byte
+					d.scanner.Buffer(buffer, d.config.MaxAmmoSize)
+				}
 				continue
 			}
 			return nil, d.scanner.Err()

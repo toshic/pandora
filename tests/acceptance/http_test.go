@@ -100,6 +100,12 @@ func (s *PandoraSuite) Test_Http_Check_Passes() {
 			},
 			wantCnt: 8,
 		},
+		{
+			name:    "http-long-uri",
+			filecfg: "testdata/http/http-log-uri.yaml",
+			isTLS:   false,
+			wantCnt: 4,
+		},
 	}
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
