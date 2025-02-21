@@ -182,7 +182,6 @@ func (g *Gun) Bind(aggr core.Aggregator, deps core.GunDeps) error {
 	g.GunDeps = deps
 
 	if ent := deps.Log.Check(zap.DebugLevel, "Gun bind"); ent != nil {
-		deps.Log.Warn("Deprecation Warning: log level: debug doesn't produce request/response logs anymore. Please use AnswLog option instead:\nanswlog:\n  enabled: true\n  filter: all|warning|error\n  path: answ.log")
 		g.DebugLog = true
 	}
 
