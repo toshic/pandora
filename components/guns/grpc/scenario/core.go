@@ -200,7 +200,7 @@ func (g *Gun) shootStep(step *Call, sample *netsample.Sample, ammoName string, t
 	sample.SetProtoCode(code) // for setRTT inside
 
 	if grpcErr != nil {
-		g.gun.GunDeps.Log.Error("response error", zap.Error(err))
+		g.gun.GunDeps.Log.Error("response error", zap.Error(grpcErr))
 	}
 
 	g.gun.Answ(&method, message, step.Metadata, out, grpcErr, code)
